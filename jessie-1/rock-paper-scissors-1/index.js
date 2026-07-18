@@ -75,14 +75,14 @@ rl.question(
           result =
             computerChoice === "scissors"
               ? "You win!"
-              : "Computer wins!";
+              : "The computer wins!";
           break;
 
         case "paper":
           result =
             computerChoice === "rock"
               ? "You win!"
-              : "Computer wins!";
+              : "The computer wins!";
           break;
 
         case "scissors":

@@ -31,15 +31,20 @@ console.log(`Pc chose ${movePcHand}`)
 if (movePcHand === moveHumanHand) {
     console.log("It's a draw");
 
-} else if (movePcHand === "rock" && moveHumanHand === "paper") {
+} else if (movePcHand === "rock" && moveHumanHand === "scissor") {
     console.log("PC won!")
 
-} else if (movePcHand === "paper" && moveHumanHand === "rock") {
-    console.log("Pc won!")
+} else if (movePcHand === "rock" && moveHumanHand === "paper") {
+    console.log("Human won!")
 
 } else if (movePcHand === "paper" && moveHumanHand === "scissor") {
     console.log("Human won!")
 
+} else if (movePcHand === "paper" && moveHumanHand === "rock") {
+    console.log("PC won!")
+
+} else if (movePcHand === "scissor" && moveHumanHand === "paper") {
+    console.log("PC won!")
 } else { 
     console.log("Human won!")
 }

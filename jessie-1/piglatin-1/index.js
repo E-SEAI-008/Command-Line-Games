@@ -1,3 +1,5 @@
+
+// Just a decorative, clean start to the program
 console.clear();
 
 console.log(
@@ -6,24 +8,25 @@ console.log(
   "*******************************************\n"
 );
 
+// Prepare to get user input.
+// This is a built-in Node.js module, so nothing needs to be installed.
 const readline = require("node:readline");
 
-
-
+// Create the readline interface for terminal input and output. Needs to be closed later
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const vowels = "aeiou";
+// Using a Set for membership lookup practice.
+// With only five values, a string would also work well.
+const vowels = new Set(["a", "e", "i", "o", "u"]);
 
-function countLeadingConsonants(word) {
+// searching for the split point, automatically logging if it starts with a vowel by position
+function findFirstVowelIndex(word) {
   let index = 0;
 
-  while (
-    index < word.length &&
-    !vowels.includes(word[index])
-  ) {
+  while (index < word.length && !vowels.has(word[index])) {
     index++;
   }
 
@@ -31,54 +34,58 @@ function countLeadingConsonants(word) {
 }
 
 function convertToPigLatin(originalWord) {
-  const capitalized =
+  // Store whether the original word started with an uppercase letter.
+  const wasCapitalized =
     originalWord[0] === originalWord[0].toUpperCase();
 
-  let word = originalWord.toLowerCase();
+  const word = originalWord.toLowerCase();
+  const splitIndex = findFirstVowelIndex(word);
 
-  const numberOfLeadingConsonants =
-    countLeadingConsonants(word);
+  let translatedWord;
 
-  if (numberOfLeadingConsonants === 0) {
-    word = word + "way";
+  // Word starts with a vowel.
+  if (splitIndex === 0) {
+    translatedWord = word + "way";
   } else {
-    word =
-      word.slice(numberOfLeadingConsonants) +
-      word.slice(0, numberOfLeadingConsonants) +
+    // Word starts with one or more consonants.
+    translatedWord =
+      word.slice(splitIndex) +
+      word.slice(0, splitIndex) +
       "ay";
   }
 
-  if (capitalized) {
-    word =
-      word[0].toUpperCase() +
-      word.slice(1);
+  // Restore capitalization.
+  if (wasCapitalized) {
+    translatedWord =
+      translatedWord[0].toUpperCase() +
+      translatedWord.slice(1);
   }
 
-  return word;
+  return translatedWord;
 }
 
+// rl.question passes the user's response to the callback function
+// instead of returning it directly.
 rl.question(
   "Enter an English phrase, or press Enter to quit: ",
   (input) => {
+    // Store the input without leading or trailing whitespace.
     const trimmedInput = input.trim();
 
     if (trimmedInput === "") {
       console.log("Program ended.");
-      rl.close();
-      return;
+      rl.close(); // Close the readline interface.
+      return; // Treat empty input as an intentional quit.
     }
 
-    const englishList = trimmedInput.split(/\s+/);
-    const pigList = [];
+    const pigLatinPhrase = trimmedInput
+      .split(/\s+/) // Split on one or more whitespace characters.
+      .map(convertToPigLatin) // Translate each word into a new array.
+      .join(" "); // Join the translated words back into a string.
 
-    for (const word of englishList) {
-      const pigLatinWord = convertToPigLatin(word);
-      pigList.push(pigLatinWord);
-    }
+    console.log(`\nOriginal phrase:\n${trimmedInput}\n`);
+    console.log(`Pig Latin:\n${pigLatinPhrase}\n`);
 
-    console.log(`\nOriginal phrase: \n${trimmedInput}\n`);
-    console.log(`Pig Latin: \n${pigList.join(" ")}\n`);
-
-    rl.close();
+    rl.close(); // Close the readline interface.
   }
 );
